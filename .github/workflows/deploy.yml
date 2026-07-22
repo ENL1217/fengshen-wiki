@@ -4,6 +4,8 @@ on:
   push:
     branches: [master]
   workflow_dispatch:
+  schedule:
+    - cron: '0 18 * * *'   # 每日自動刷新（抓資料庫最新內容）
 
 permissions:
   contents: read
@@ -31,7 +33,7 @@ jobs:
         run: |
           git config --file .gitmodules submodule.content.url git@github.com:ENL1217/fengshen-db.git
           git submodule sync
-          git submodule update --init --recursive
+          git submodule update --init --remote --recursive
       - uses: actions/setup-node@v4
         with:
           node-version: 22
