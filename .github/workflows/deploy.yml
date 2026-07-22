@@ -29,7 +29,8 @@ jobs:
       # 3. 讓 HTTPS 的 submodule URL 改走 SSH+deploy key，再抓取私有資料
       - name: Fetch private content submodule
         run: |
-          git config url."git@github.com:".insteadOf "https://github.com/"
+          git config --file .gitmodules submodule.content.url git@github.com:ENL1217/fengshen-db.git
+          git submodule sync
           git submodule update --init --recursive
       - uses: actions/setup-node@v4
         with:
