@@ -1,0 +1,53 @@
+name: Deploy Quartz to GitHub Pages
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. 先 checkout 本 repo（公開，用預設 token，暫不含 submodule）
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      # 2. 載入 deploy key（唯讀）以讀取私有的 content 資料 submodule
+      - uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.CONTENT_DEPLOY_KEY }}
+      # 3. 讓 HTTPS 的 submodule URL 改走 SSH+deploy key，再抓取私有資料
+      - name: Fetch private content submodule
+        run: |
+          git config url."git@github.com:".insteadOf "https://github.com/"
+          git submodule update --init --recursive
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install & build
+        run: |
+          npm ci
+          node ./quartz/bootstrap-cli.mjs build
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+  deploy:
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
