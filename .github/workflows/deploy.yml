@@ -21,11 +21,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # 1. 先 checkout 本 repo（公開，用預設 token，暫不含 submodule）
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
       # 2. 載入 deploy key（唯讀）以讀取私有的 content 資料 submodule
-      - uses: webfactory/ssh-agent@v0.9.0
+      - uses: webfactory/ssh-agent@v0.10.0
         with:
           ssh-private-key: ${{ secrets.CONTENT_DEPLOY_KEY }}
       # 3. 讓 HTTPS 的 submodule URL 改走 SSH+deploy key，再抓取私有資料
@@ -34,14 +34,14 @@ jobs:
           git config --file .gitmodules submodule.content.url git@github.com:ENL1217/fengshen-db.git
           git submodule sync
           git submodule update --init --remote --recursive
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
       - name: Install & build
         run: |
           npm ci
           node ./quartz/bootstrap-cli.mjs build
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: public
 
@@ -53,4 +53,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
