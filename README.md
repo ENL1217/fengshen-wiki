@@ -17,4 +17,5 @@ Quartz is a set of tools that helps you publish your [digital garden](https://jz
 </p>
 
 
-2026-11-03 補圖更新：本輪新增 125 張已核實來源圖像，補入 133 位原缺圖人物；合計 226 張主要圖像、228 位人物有圖，156 位仍待核實。詳見 [圖像索引](https://enl1217.github.io/fengshen-wiki/95-圖像資料/圖像索引)、[缺圖人物查核](https://enl1217.github.io/fengshen-wiki/95-圖像資料/缺圖人物查核) 與逐圖來源紀錄。
+
+2026-11-03 圖像續補：282 張主要圖像、250 位人物有圖，另補入 36 個法器、7 個坐騎、18 個陣法及 2 個法術條目的場景圖。134 位人物仍待核實，所有已採圖像保留來源與授權。分類查核見 [人物法器坐騎陣法圖像續查](https://enl1217.github.io/fengshen-wiki/95-圖像資料/人物法器坐騎陣法圖像續查)。
