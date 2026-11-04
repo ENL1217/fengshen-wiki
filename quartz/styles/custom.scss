@@ -127,8 +127,10 @@ article .home-statement::before { display: none; }
 .home-counts span { font-size: .7rem; color: var(--darkgray); }
 .count-note { font-size: .65rem; color: var(--darkgray); margin-top: .4rem; }
 .home-entrances { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .85rem; margin: 1.5rem 0; }
-article a.entrance-card { display: block; border: 1px solid var(--lightgray); background: transparent; padding: 1rem; transition: border-color .2s; }
-article a.entrance-card:hover { border-color: var(--seal); }
+article .entrance-card { display: block; border: 1px solid var(--lightgray); background: transparent; padding: 1rem; transition: border-color .2s; }
+article .entrance-card:hover { border-color: var(--seal); }
+.research-links { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: .5rem; font-size: .75rem; }
+.research-links a { display: inline-block; padding: .2rem 0; }
 .entrance-card small { color: var(--seal); font-size: .7rem; }
 .entrance-card h3 { margin: .25rem 0; font-size: 1.15rem; }
 .entrance-card h3 span { float: right; color: var(--seal); font-size: .9rem; }
@@ -157,5 +159,5 @@ article a.entrance-card:hover { border-color: var(--seal); }
   .home-counts strong { font-size: 1.4rem; }
   .home-counts span { font-size: .58rem; }
   .home-entrances { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6rem; }
-  article a.entrance-card { padding: .8rem; }
+  article .entrance-card { padding: .8rem; }
 }

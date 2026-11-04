@@ -35,7 +35,7 @@ const DatabaseHome: QuartzComponent = (props) => {
     })}</div>
     <div class="home-counts" aria-label="資料庫規模">{counts.map(([count, label]) => <div><strong>{count}</strong><span>{label}</span></div>)}</div>
     <p class="count-note">數量依資料自動彙整；圖像包含古籍繪本、刊本插圖及其他已標示授權的參考圖。</p>
-    <section class="home-entrances" aria-label="查詢入口">{entrances.map(([target, title, description, number]) => <a class="internal entrance-card" href={link(target)}><small>{number}</small><h3>{title}<span>↗</span></h3><p>{description}</p></a>)}</section>
+    <section class="home-entrances" aria-label="查詢入口">{entrances.map(([target, title, description, number]) => number === "06" ? <div class="entrance-card"><small>{number}</small><h3>{title}</h3><p>{description}</p><nav class="research-links" aria-label="考據分類"><a class="internal" href={assetUrl(fileData.slug!, "80-跨文本對應/")}>跨文本 →</a><a class="internal" href={link(target)}>史書對照 →</a></nav></div> : <a class="internal entrance-card" href={link(target)}><small>{number}</small><h3>{title}<span>↗</span></h3><p>{description}</p></a>)}</section>
     <div class="home-secondary"><a class="internal" href={link("師承譜系")}>師承譜系</a><a class="internal" href={link("關係圖譜")}>全站圖譜</a><a class="internal" href={link("圖像索引")}>圖像畫冊</a><a class="internal" href={link("外部圖像參考")}>外部圖像參考</a></div>
     <p class="latest-update">最新更新：查詢介面與條目資訊卡改版；圖片與外部參考分開統計。<a class="internal" href={link("更新紀錄")}>查看更新紀錄 →</a></p>
   </div>

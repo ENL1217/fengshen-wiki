@@ -123,7 +123,7 @@ export const wikilinkRegex = new RegExp(
 // ^\|([^\n])+\|\n(\|) -> matches the header row
 // ( ?:?-{3,}:? ?\|)+  -> matches the header row separator
 // (\|([^\n])+\|\n)+   -> matches the body rows
-export const tableRegex = new RegExp(/^\|([^\n])+\|\n(\|)( ?:?-{3,}:? ?\|)+\n(\|([^\n])+\|\n?)+/gm)
+export const tableRegex = /^\|[^\r\n]+\|\r?\n\|(?:[ \t]*:?-{3,}:?[ \t]*\|)+\r?\n(?:\|[^\r\n]+\|(?:\r?\n|$))+/gm
 
 // matches any wikilink, only used for escaping wikilinks inside tables
 export const tableWikilinkRegex = new RegExp(/(!?\[\[[^\]]*?\]\]|\[\^[^\]]*?\])/g)
