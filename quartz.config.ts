@@ -1,5 +1,6 @@
 import { QuartzConfig } from "./quartz/cfg"
 import * as Plugin from "./quartz/plugins"
+import DatabaseContent from "./quartz/components/pages/DatabaseContent"
 
 /**
  * Quartz 4 Configuration
@@ -78,7 +79,7 @@ const config: QuartzConfig = {
     emitters: [
       Plugin.AliasRedirects(),
       Plugin.ComponentResources(),
-      Plugin.ContentPage(),
+      Plugin.ContentPage({ pageBody: DatabaseContent() }),
       Plugin.FolderPage(),
       Plugin.TagPage(),
       Plugin.ContentIndex({
