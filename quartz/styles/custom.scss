@@ -86,6 +86,40 @@ footer { border-top: 1px solid var(--lightgray); padding-top: 1rem; font-size: .
 .full-graph .graph-outer { height: 36rem; }
 .full-graph .graph-container { height: 100%; }
 body[data-slug="關係圖譜"] .sidebar.right > .graph { display: none; }
+body[data-slug="index"] .sidebar.right { display: none; }
+body[data-slug="index"] .center { grid-column: 2 / 4; }
+body[data-slug="index"] .page-header { margin-bottom: 1.5rem; }
+body[data-slug="index"] .article-title { font-size: 1rem; color: var(--darkgray); letter-spacing: .2em; }
+.home-kicker { font-size: .75rem; color: var(--seal); letter-spacing: .24em; }
+article .home-statement { border: none; padding: 0; font-size: clamp(1.9rem, 3.5vw, 3.1rem); line-height: 1.5; margin: .8rem 0; }
+article .home-statement::before { display: none; }
+.home-statement span { color: var(--indigo); }
+.home-position { max-width: 40rem; color: var(--darkgray); font-size: .95rem; }
+.home-layers { display: flex; gap: 1.5rem; padding: .7rem 0 1.5rem; }
+.home-layers > div { display: flex; flex-direction: column; gap: .3rem; font-size: .7rem; color: var(--darkgray); }
+.home-layers .layer-badge { margin-left: 0; align-self: start; }
+.hero-portraits { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: .65rem; border-top: 1px solid var(--lightgray); padding-top: 1rem; }
+.hero-portraits figure { margin: 0; min-width: 0; }
+.hero-portraits figure > a:first-child { display: block; background: none; }
+.hero-portraits img { display: block; width: 100%; height: 14rem; object-fit: contain; background: #eae1d1; margin: 0; transition: transform .2s; }
+.hero-portraits a:hover img { transform: translateY(-3px); }
+.hero-portraits figcaption { padding: .5rem 0 .15rem; font-family: var(--headerFont); font-weight: 700; font-size: 1rem; text-align: center; letter-spacing: .12em; }
+.hero-portraits .hero-credit { display: block; font-size: .55rem; color: var(--darkgray); text-align: center; }
+.home-counts { display: grid; grid-template-columns: repeat(5, 1fr); border-block: 1px solid var(--lightgray); margin-top: 1.5rem; padding: .9rem 0; }
+.home-counts > div { text-align: center; border-right: 1px solid var(--lightgray); }
+.home-counts > div:last-child { border: none; }
+.home-counts strong { display: block; font-size: 1.9rem; font-family: var(--headerFont); color: var(--seal); line-height: 1.4; }
+.home-counts span { font-size: .7rem; color: var(--darkgray); }
+.count-note { font-size: .65rem; color: var(--darkgray); margin-top: .4rem; }
+.home-entrances { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .85rem; margin: 1.5rem 0; }
+article a.entrance-card { display: block; border: 1px solid var(--lightgray); background: transparent; padding: 1rem; transition: border-color .2s; }
+article a.entrance-card:hover { border-color: var(--seal); }
+.entrance-card small { color: var(--seal); font-size: .7rem; }
+.entrance-card h3 { margin: .25rem 0; font-size: 1.15rem; }
+.entrance-card h3 span { float: right; color: var(--seal); font-size: .9rem; }
+.entrance-card p { font: .75rem/1.8 var(--bodyFont); color: var(--darkgray); margin: .5rem 0 0; }
+.home-secondary { display: flex; flex-wrap: wrap; gap: 1.2rem; font-size: .8rem; }
+.latest-update { border-top: 1px solid var(--lightgray); padding-top: 1rem; font-size: .75rem; color: var(--darkgray); }
 @media (max-width: 800px) {
   body { font-size: 15px; }
   article blockquote { padding: .2rem .8rem; }
@@ -99,4 +133,14 @@ body[data-slug="關係圖譜"] .sidebar.right > .graph { display: none; }
   .character-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .image-catalog { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .image-catalog img { height: 8rem; }
+  body[data-slug="index"] .center { grid-column: auto; }
+  .home-layers { gap: .65rem; }
+  .home-layers > div { font-size: .6rem; }
+  .hero-portraits { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .hero-portraits img { height: 9rem; }
+  .hero-portraits figcaption { font-size: .9rem; }
+  .home-counts strong { font-size: 1.4rem; }
+  .home-counts span { font-size: .58rem; }
+  .home-entrances { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6rem; }
+  article a.entrance-card { padding: .8rem; }
 }
