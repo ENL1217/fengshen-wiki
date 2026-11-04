@@ -31,8 +31,14 @@ const defaultOptions: Options = {
     return node
   },
   sortFn: function strokeSort(a, b) {
+    const topA = a.slug.split("/").length === (a.isFolder ? 2 : 1)
+    const topB = b.slug.split("/").length === (b.isFolder ? 2 : 1)
+    if (topA && topB && a.isFolder && b.isFolder) {
+      return a.slugSegment.localeCompare(b.slugSegment, "en", { numeric: true })
+    }
     // Sort order: folders first, then files. Sort folders and files alphabeticall
     if ((!a.isFolder && !b.isFolder) || (a.isFolder && b.isFolder)) {
+      if (topA && topB) return a.displayName.localeCompare(b.displayName, "zh-Hant-TW", { numeric: true })
       // numeric: true: Whether numeric collation should be used, such that "1" < "2" < "10"
       // sensitivity: "base": Only strings that differ in base letters compare as unequal. Examples: a ≠ b, a = á, a = A
       const sorter = strokeSort as typeof strokeSort & { collator?: Intl.Collator }

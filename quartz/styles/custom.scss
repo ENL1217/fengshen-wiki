@@ -9,7 +9,7 @@ body { line-height: 1.85; background-image: radial-gradient(ellipse at 50% 0, va
 article { overflow-wrap: anywhere; }
 article h2 { border-bottom: 1px solid var(--lightgray); padding-bottom: .45rem; margin-top: 2.4rem; }
 article h2::before { content: ""; display: inline-block; width: .48rem; height: .48rem; background: var(--seal); margin: 0 .65rem .15rem 0; }
-article blockquote { font-family: var(--headerFont); font-size: 1.05rem; line-height: 2; border-left: 2px solid var(--seal); padding: .25rem 1.25rem; margin: 1.5rem 0; color: var(--dark); background: var(--highlight); }
+article blockquote { display: flow-root; font-family: var(--headerFont); font-size: 1.05rem; line-height: 2; border-left: 2px solid var(--seal); padding: .25rem 1.25rem; margin: 1.5rem 0; color: var(--dark); background: var(--highlight); }
 .source-citation { display: block; text-align: right; font-size: .85em; color: var(--darkgray); }
 .layer-badge { display: inline-block; vertical-align: middle; font-family: var(--bodyFont); font-size: .7rem; line-height: 1.6; padding: .12rem .5rem; border: 1px solid currentColor; border-radius: 2px; letter-spacing: .04em; margin-left: .6rem; }
 .layer-l1 { color: var(--seal); }
@@ -38,6 +38,9 @@ footer { border-top: 1px solid var(--lightgray); padding-top: 1rem; font-size: .
 .entry-infobox dl { display: grid; grid-template-columns: 4.2rem minmax(0, 1fr); gap: .5rem .6rem; padding: .8rem; margin: 0; }
 .entry-infobox dt { color: var(--darkgray); font-weight: 600; }
 .entry-infobox dd { margin: 0; min-width: 0; }
+@media (max-width: 1100px) {
+  .entry-infobox { float: none; width: auto; margin: 0 0 1.5rem; }
+}
 .camp-tag { display: inline-block; background: var(--highlight); border: 1px solid var(--lightgray); padding: 0 .35rem; margin: 0 .2rem .2rem 0; color: var(--indigo); }
 .camp-截教, .camp-殷商 { color: var(--seal); }
 .game-stats { border-top: 1px solid var(--lightgray); padding: .7rem; }
