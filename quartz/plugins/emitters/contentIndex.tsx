@@ -7,6 +7,7 @@ import { QuartzEmitterPlugin } from "../types"
 import { toHtml } from "hast-util-to-html"
 import { write } from "./helpers"
 import { i18n } from "../../i18n"
+import { findFile, plain, values } from "../../util/database"
 
 export type ContentIndexMap = Map<FullSlug, ContentDetails>
 export type ContentDetails = {
@@ -16,6 +17,9 @@ export type ContentDetails = {
   links: SimpleSlug[]
   tags: string[]
   content: string
+  aliases?: string[]
+  type?: string
+  relationLinks?: SimpleSlug[]
   richContent?: string
   date?: Date
   description?: string
@@ -99,6 +103,7 @@ export const ContentIndex: QuartzEmitterPlugin<Partial<Options>> = (opts) => {
     async *emit(ctx, content) {
       const cfg = ctx.cfg.configuration
       const linkIndex: ContentIndexMap = new Map()
+      const allFiles = content.map(([, file]) => file.data)
       for (const [tree, file] of content) {
         const slug = file.data.slug!
         const date = getDate(ctx.cfg.configuration, file.data) ?? new Date()
@@ -110,6 +115,13 @@ export const ContentIndex: QuartzEmitterPlugin<Partial<Options>> = (opts) => {
             links: file.data.links ?? [],
             tags: file.data.frontmatter?.tags ?? [],
             content: file.data.text ?? "",
+            aliases: values(file.data.frontmatter?.aliases),
+            type: plain(file.data.frontmatter?.["類型"]),
+            relationLinks: (() => {
+              const fm = file.data.frontmatter
+              const value = JSON.stringify([fm?.["師承"], fm?.["關係"]])
+              return [...new Set([...value.matchAll(/\[\[([^\]|]+)(?:\|[^\]]+)?\]\]/g)].map(match => findFile(match[1], allFiles)).filter(f => f?.frontmatter?.["類型"] === "人物").map(f => simplifySlug(f!.slug!)))]
+            })(),
             richContent: opts?.rssFullHtml
               ? escapeHTML(toHtml(tree as Root, { allowDangerousHtml: true }))
               : undefined,

@@ -1,6 +1,7 @@
 import { QuartzConfig } from "./quartz/cfg"
 import * as Plugin from "./quartz/plugins"
 import DatabaseContent from "./quartz/components/pages/DatabaseContent"
+import { CharacterIndex } from "./quartz/plugins/emitters/characterIndex"
 
 /**
  * Quartz 4 Configuration
@@ -86,6 +87,7 @@ const config: QuartzConfig = {
         enableSiteMap: true,
         enableRSS: true,
       }),
+      CharacterIndex(),
       Plugin.Assets(),
       Plugin.Static(),
       Plugin.Favicon(),

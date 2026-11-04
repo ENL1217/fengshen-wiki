@@ -55,6 +55,37 @@ footer { border-top: 1px solid var(--lightgray); padding-top: 1rem; font-size: .
 .image-lightbox::backdrop { background: #100e0bd9; }
 .image-lightbox button { display: block; margin-left: auto; padding: .5rem 1rem; border: 1px solid var(--lightgray); background: var(--light); color: var(--dark); cursor: pointer; }
 .image-lightbox img { display: block; max-width: 86vw; max-height: 78vh; object-fit: contain; margin: .6rem auto 0; }
+.browse-filters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .7rem; padding: 1rem; border: 1px solid var(--lightgray); background: var(--highlight); }
+.browse-filters label, .gallery-filter { display: flex; flex-direction: column; gap: .25rem; font-size: .75rem; color: var(--darkgray); }
+.browse-filters input, .browse-filters select, .gallery-filter select, .reset-filters { min-width: 0; width: 100%; box-sizing: border-box; background: var(--light); color: var(--dark); border: 1px solid var(--gray); padding: .5rem; font: inherit; border-radius: 2px; }
+.reset-filters { cursor: pointer; align-self: end; }
+.browse-count, .gallery-count { font-size: .8rem; color: var(--indigo); }
+.character-table { width: 100%; }
+.character-table td:nth-child(3) { white-space: nowrap; }
+.character-cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .8rem; }
+.character-card { border: 1px solid var(--lightgray); padding: .6rem; text-align: center; }
+.character-card > a { display: block; background: none; font-family: var(--headerFont); }
+.character-card img { width: 100%; height: 10rem; object-fit: contain; display: block; }
+.character-card small { display: block; font-size: .65rem; color: var(--darkgray); }
+.no-portrait { display: grid; place-items: center; height: 10rem; background: var(--highlight); font: .7rem var(--bodyFont); color: var(--darkgray); }
+.chapter-data { border: 1px solid var(--lightgray); padding: 1rem; margin-bottom: 1.5rem; background: var(--highlight); font-size: .85rem; }
+.chapter-data nav { display: flex; justify-content: space-between; gap: 1rem; border-bottom: 1px solid var(--lightgray); padding-bottom: .7rem; margin-bottom: .7rem; }
+.chapter-data strong { color: var(--indigo); }
+.chapter-data p { margin: .2rem 0 .7rem; }
+.search-type-label { display: inline-block; font-size: .7rem; padding: .1rem .4rem; border: 1px solid var(--lightgray); color: var(--indigo); }
+.image-catalog { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .6rem; margin-top: 1rem; }
+.image-catalog figure { margin: 0; border: 1px solid var(--lightgray); padding: .4rem; min-width: 0; }
+.image-catalog img { width: 100%; height: 6rem; object-fit: contain; margin: 0; }
+.image-catalog figcaption { font-size: .6rem; line-height: 1.55; }
+.image-catalog figcaption strong { display: block; font-weight: 600; height: 2.9em; overflow: hidden; }
+.image-catalog figcaption > span { display: block; }
+.image-catalog details { font-size: .6rem; }
+.image-catalog [hidden] { display: none; }
+.gallery-filter { display: inline-flex; min-width: 10rem; margin-right: 1rem; }
+.graph-explanation { font-size: .7rem; color: var(--darkgray); }
+.full-graph .graph-outer { height: 36rem; }
+.full-graph .graph-container { height: 100%; }
+body[data-slug="關係圖譜"] .sidebar.right > .graph { display: none; }
 @media (max-width: 800px) {
   body { font-size: 15px; }
   article blockquote { padding: .2rem .8rem; }
@@ -64,4 +95,8 @@ footer { border-top: 1px solid var(--lightgray); padding-top: 1rem; font-size: .
   .entry-infobox figure img { height: 17rem; }
   .source-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6rem; }
   .source-gallery figure img { height: 9rem; }
+  .browse-filters { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: .7rem; }
+  .character-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .image-catalog { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .image-catalog img { height: 8rem; }
 }

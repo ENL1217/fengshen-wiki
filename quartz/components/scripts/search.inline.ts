@@ -71,6 +71,7 @@ let index = new FlexSearch.Document<Item>({
         field: "title",
         tokenize: "forward",
       },
+      { field: "aliases", tokenize: "forward" },
       {
         field: "content",
         tokenize: "forward",
@@ -315,6 +316,7 @@ async function setupSearch(searchElement: Element, currentSlug: FullSlug, data: 
       title: searchType === "tags" ? data[slug].title : highlight(term, data[slug].title ?? ""),
       content: highlight(term, data[slug].content ?? "", true),
       tags: highlightTags(term.substring(1), data[slug].tags),
+      type: data[slug].type ?? "資料",
     }
   }
 
@@ -349,6 +351,10 @@ async function setupSearch(searchElement: Element, currentSlug: FullSlug, data: 
       ${htmlTags}
       <p class="card-description">${content}</p>
     `
+    const typeLabel = document.createElement("span")
+    typeLabel.className = "search-type-label"
+    typeLabel.textContent = data[slug].type || "資料"
+    itemTile.prepend(typeLabel)
     itemTile.addEventListener("click", (event) => {
       if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return
       hideSearch()
@@ -453,7 +459,7 @@ async function setupSearch(searchElement: Element, currentSlug: FullSlug, data: 
           query: query,
           // return at least 10000 documents, so it is enough to filter them by tag (implemented in flexsearch)
           limit: Math.max(numSearchResults, 10000),
-          index: ["title", "content"],
+          index: ["title", "aliases", "content"],
           tag: { tags: tag },
         })
         for (let searchResult of searchResults) {
@@ -474,7 +480,7 @@ async function setupSearch(searchElement: Element, currentSlug: FullSlug, data: 
       searchResults = await index.searchAsync({
         query: currentSearchTerm,
         limit: numSearchResults,
-        index: ["title", "content"],
+        index: ["title", "aliases", "content"],
       })
     }
 
@@ -486,6 +492,7 @@ async function setupSearch(searchElement: Element, currentSlug: FullSlug, data: 
     // order titles ahead of content
     const allIds: Set<number> = new Set([
       ...getByField("title"),
+      ...getByField("aliases"),
       ...getByField("content"),
       ...getByField("tags"),
     ])
@@ -520,6 +527,7 @@ async function fillDocument(data: ContentIndex) {
         id,
         slug: slug as FullSlug,
         title: fileData.title,
+        aliases: (fileData.aliases ?? []).join(" "),
         content: fileData.content,
         tags: fileData.tags,
       }),

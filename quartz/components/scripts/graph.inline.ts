@@ -100,8 +100,9 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
   const validLinks = new Set(data.keys())
 
   const tweens = new Map<string, TweenNode>()
+  const personGraph = depth >= 0 && data.get(slug)?.type === "人物"
   for (const [source, details] of data.entries()) {
-    const outgoing = details.links ?? []
+    const outgoing = personGraph ? details.relationLinks ?? [] : details.links ?? []
 
     for (const dest of outgoing) {
       if (validLinks.has(dest)) {

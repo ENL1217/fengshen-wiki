@@ -4,6 +4,7 @@ import script from "./scripts/graph.inline"
 import style from "./styles/graph.scss"
 import { i18n } from "../i18n"
 import { classNames } from "../util/lang"
+import { resolveRelative, FullSlug } from "../util/path"
 
 export interface D3Config {
   drag: boolean
@@ -35,9 +36,9 @@ const defaultOptions: GraphOptions = {
     repelForce: 0.5,
     centerForce: 0.3,
     linkDistance: 30,
-    fontSize: 0.6,
+    fontSize: 0.9,
     opacityScale: 1,
-    showTags: true,
+    showTags: false,
     removeTags: [],
     focusOnHover: false,
     enableRadial: false,
@@ -60,14 +61,14 @@ const defaultOptions: GraphOptions = {
 }
 
 export default ((opts?: Partial<GraphOptions>) => {
-  const Graph: QuartzComponent = ({ displayClass, cfg }: QuartzComponentProps) => {
+  const Graph: QuartzComponent = ({ displayClass, cfg, fileData }: QuartzComponentProps) => {
     const localGraph = { ...defaultOptions.localGraph, ...opts?.localGraph }
     const globalGraph = { ...defaultOptions.globalGraph, ...opts?.globalGraph }
     return (
-      <div class={classNames(displayClass, "graph")}>
+      <div class={classNames(displayClass, "graph", fileData.slug === "關係圖譜" ? "full-graph" : undefined)}>
         <h3>{i18n(cfg.locale).components.graph.title}</h3>
         <div class="graph-outer">
-          <div class="graph-container" data-cfg={JSON.stringify(localGraph)}></div>
+          <div class="graph-container" data-cfg={JSON.stringify(fileData.slug === "關係圖譜" ? { ...globalGraph, showTags: false } : localGraph)}></div>
           <button class="global-graph-icon" aria-label="Global Graph">
             <svg
               version="1.1"
@@ -95,6 +96,7 @@ export default ((opts?: Partial<GraphOptions>) => {
             </svg>
           </button>
         </div>
+        <p class="graph-explanation">{fileData.frontmatter?.["類型"] === "人物" ? "一層師承、親屬與恩怨關係" : "一層條目連結"} · <a class="internal" href={resolveRelative(fileData.slug!, "關係圖譜" as FullSlug)}>全站圖譜</a></p>
         <div class="global-graph-outer">
           <div class="global-graph-container" data-cfg={JSON.stringify(globalGraph)}></div>
         </div>

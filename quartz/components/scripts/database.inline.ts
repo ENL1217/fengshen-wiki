@@ -1,4 +1,20 @@
 function setupDatabase() {
+  const browser = document.querySelector<HTMLElement>(".character-browser")
+  if (browser) void setupCharacters(browser)
+  const gallery = document.querySelector<HTMLSelectElement>("select[name='gallery-category']")
+  if (gallery) {
+    const filter = () => {
+      let count = 0
+      document.querySelectorAll<HTMLElement>(".image-catalog > figure").forEach(figure => {
+        figure.hidden = !!gallery.value && !(figure.dataset.category ?? "").split(" ").includes(gallery.value)
+        if (!figure.hidden) count++
+      })
+      document.querySelector(".gallery-count")!.textContent = `顯示 ${count} 幅`
+    }
+    gallery.addEventListener("change", filter)
+    window.addCleanup(() => gallery.removeEventListener("change", filter))
+    filter()
+  }
   document.querySelectorAll("article h2").forEach(heading => {
     if (heading.textContent?.trim() !== "古籍圖像") return
     const grid = document.createElement("div")
@@ -56,3 +72,73 @@ function setupDatabase() {
   window.addCleanup(() => document.removeEventListener("click", openImage))
 }
 document.addEventListener("nav", setupDatabase)
+
+type CharacterRow = { slug: string; name: string; aliases: string[]; camp: string[]; appearance: string; history: string; god: boolean; first: number | null; image: string | null }
+async function setupCharacters(root: HTMLElement) {
+  try {
+    const response = await fetch(root.dataset.index!)
+    if (!response.ok) throw new Error(`人物索引 ${response.status}`)
+    const characters: CharacterRow[] = await response.json()
+    if (!root.isConnected) return
+    const field = (name: string) => root.querySelector<HTMLInputElement | HTMLSelectElement>(`[name='${name}']`)!
+    for (const key of ["camp", "appearance", "history"] as const) {
+      const options = [...new Set(characters.flatMap(person => Array.isArray(person[key]) ? person[key] : [person[key]]))].filter(Boolean).sort(new Intl.Collator("zh-Hant-TW-u-co-stroke").compare)
+      for (const value of options) field(key).append(new Option(value, value))
+    }
+    const node = (tag: string, text?: string) => { const element = document.createElement(tag); if (text) element.textContent = text; return element }
+    const url = (path: string) => new URL(root.dataset.root! + path.split("/").map(encodeURIComponent).join("/"), location.href).href
+    const render = () => {
+      const query = field("name").value.trim().toLowerCase()
+      const list = characters.filter(person => {
+        const first = person.first
+        return (!query || [person.name, ...person.aliases].some(name => name.toLowerCase().includes(query)))
+          && (!field("camp").value || person.camp.includes(field("camp").value))
+          && (!field("appearance").value || person.appearance === field("appearance").value)
+          && (!field("history").value || person.history === field("history").value)
+          && (!field("image").value || Boolean(person.image) === (field("image").value === "yes"))
+          && (!field("god").value || person.god === (field("god").value === "yes"))
+          && (!field("from").value || !!first && first >= Number(field("from").value))
+          && (!field("to").value || !!first && first <= Number(field("to").value))
+      })
+      const collator = new Intl.Collator("zh-Hant-TW-u-co-stroke")
+      list.sort((a, b) => (field("sort").value === "first" ? (a.first ?? Infinity) - (b.first ?? Infinity) : field("sort").value === "camp" ? collator.compare(a.camp.join(""), b.camp.join("")) : 0) || collator.compare(a.name, b.name))
+      const results = root.querySelector(".browse-results")!
+      results.replaceChildren()
+      root.querySelector(".browse-count")!.textContent = `顯示 ${list.length}／${characters.length} 位人物`
+      const cards = field("view").value === "cards"
+      const container = node(cards ? "div" : "table")
+      container.className = cards ? "character-cards" : "character-table"
+      if (!cards) {
+        const head = node("thead"), tr = node("tr")
+        for (const title of ["人物", "陣營", "初登場", "歷史性", "封神", "圖像"]) { const th = node("th", title); th.setAttribute("scope", "col"); tr.append(th) }
+        head.append(tr); container.append(head)
+      }
+      const body = cards ? container : node("tbody")
+      for (const person of list) {
+        const row = node(cards ? "div" : "tr")
+        const name = node("a", person.name) as HTMLAnchorElement
+        name.href = url(person.slug); name.className = "internal"
+        if (cards) {
+          row.className = "character-card"
+          if (person.image) { const img = document.createElement("img"); img.src = url(person.image); img.alt = person.name; img.loading = "lazy"; img.width = 160; img.height = 180; name.prepend(img) }
+          else { const missing = node("span", "暫無站內圖像"); missing.className = "no-portrait"; name.prepend(missing) }
+          row.append(name, node("small", person.camp.join("、")), node("small", person.first ? `第${person.first}回初登場` : "初登場待補"))
+        } else {
+          const cell = node("td"); cell.append(name); row.append(cell)
+          for (const text of [person.camp.join("、") || "—", person.first ? `第${person.first}回` : "待補", person.history || "待補", person.god ? "已封神" : "—", person.image ? "有" : "—"]) row.append(node("td", text))
+        }
+        body.append(row)
+      }
+      if (!cards) container.append(body)
+      const wrapper = node("div"); wrapper.className = "table-container"; wrapper.append(container); results.append(wrapper)
+    }
+    root.addEventListener("input", render)
+    root.addEventListener("change", render)
+    const reset = () => { root.querySelectorAll<HTMLInputElement | HTMLSelectElement>("input, select").forEach(input => { if (input instanceof HTMLSelectElement) input.selectedIndex = 0; else input.value = "" }); render() }
+    root.querySelector(".reset-filters")!.addEventListener("click", reset)
+    window.addCleanup(() => { root.removeEventListener("input", render); root.removeEventListener("change", render); root.querySelector(".reset-filters")?.removeEventListener("click", reset) })
+    render()
+  } catch {
+    root.querySelector(".browse-count")!.textContent = "人物索引載入失敗，請重新整理或使用左側目錄。"
+  }
+}
