@@ -30,12 +30,14 @@ const defaultOptions: Options = {
     if (node.isFolder) node.displayName = node.displayName.replace(/^\d+-/, "")
     return node
   },
-  sortFn: (a, b) => {
+  sortFn: function strokeSort(a, b) {
     // Sort order: folders first, then files. Sort folders and files alphabeticall
     if ((!a.isFolder && !b.isFolder) || (a.isFolder && b.isFolder)) {
       // numeric: true: Whether numeric collation should be used, such that "1" < "2" < "10"
       // sensitivity: "base": Only strings that differ in base letters compare as unequal. Examples: a ≠ b, a = á, a = A
-      return new Intl.Collator("zh-Hant-TW-u-co-stroke", { numeric: true }).compare(a.displayName, b.displayName)
+      const sorter = strokeSort as typeof strokeSort & { collator?: Intl.Collator }
+      sorter.collator ??= new Intl.Collator("zh-Hant-TW-u-co-stroke", { numeric: true })
+      return sorter.collator.compare(a.displayName, b.displayName)
     }
 
     if (!a.isFolder && b.isFolder) {
@@ -79,6 +81,8 @@ export default ((userOpts?: Partial<Options>) => {
           class="explorer-toggle mobile-explorer hide-until-loaded"
           data-mobile={true}
           aria-controls={id}
+          aria-label="開啟或收合目錄"
+          aria-expanded={false}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

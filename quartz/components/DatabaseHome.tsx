@@ -8,6 +8,7 @@ const DatabaseHome: QuartzComponent = (props) => {
   const counts = [
     [people.length, "人物條目"],
     [allFiles.filter(f => f.frontmatter?.["類型"] === "法寶").length, "法寶條目"],
+    [allFiles.filter(f => f.frontmatter?.["類型"] === "坐騎").length, "坐騎條目"],
     [Number(plain(gods?.frontmatter?.["總數"]).match(/\d+/)?.[0]) || 0, "正神名錄"],
     [allFiles.filter(f => f.frontmatter?.["類型"] === "回目" && Number(f.frontmatter?.["回數"]) > 0).length, "原著回目"],
     [images.length, "收錄圖像"],
@@ -23,9 +24,9 @@ const DatabaseHome: QuartzComponent = (props) => {
   ]
   return <div class="database-home">
     <div class="home-kicker">原典有據 · 考據有別 · 創作有界</div>
-    <h2 class="home-statement">循原文，識人物。<br /><span>讀懂封神的來龍去脈。</span></h2>
-    <p class="home-position">逐條附原文回目出處，原典、考據、自創分層標示的《封神演義》全人物資料庫。</p>
-    <div class="home-layers">{[["1", "原典", "小說原文與回目出處"], ["2", "考據", "跨文本與史料辨析"], ["3", "自創", "遊戲設定與創作推演"]].map(([level, label, desc]) => <div><span class={`layer-badge layer-l${level}`}>L{level} {label}</span><span>{desc}</span></div>)}</div>
+    <h2 class="home-statement">每一句，都有回目可查。</h2>
+    <p class="home-position">《封神演義》全人物資料庫，原典、考據、自創，分層標示。</p>
+    <div class="home-layers">{[["1", "原典", "小說原文怎麼寫，逐句附回目出處。"], ["2", "考據", "跨文本與史書對照，說明依據來源。"], ["3", "自創", "遊戲數值與推演設定，明確標示非原著。"]].map(([level, label, desc]) => <div><span class={`layer-badge layer-l${level}`}>{label} L{level}</span><span>{desc}</span></div>)}</div>
     <div class="hero-portraits" aria-label="墨繪人物精選">{["哪吒", "楊戩", "姜子牙", "聞仲", "通天教主", "妲己"].map(name => {
       const file = findFile(name, allFiles)!
       const image = firstImage(file)

@@ -4,6 +4,8 @@ import { write } from "./helpers"
 import { BuildCtx } from "../../util/ctx"
 import { VFile } from "vfile"
 import path from "path"
+import { escapeHTML } from "../../util/escape"
+import { firstImage } from "../../util/database"
 
 async function* processFile(ctx: BuildCtx, file: VFile) {
   const ogSlug = simplifySlug(file.data.slug!)
@@ -16,15 +18,20 @@ async function* processFile(ctx: BuildCtx, file: VFile) {
     ) as FullSlug
 
     const redirUrl = resolveRelative(aliasTargetSlug, ogSlug)
+    const description = escapeHTML(file.data.description ?? `${file.data.frontmatter?.title ?? ogSlug}：封神演義資料庫條目`)
+    const image = firstImage(file.data)
+    const imageUrl = `https://${ctx.cfg.configuration.baseUrl}/${image ? image.split("/").map(encodeURIComponent).join("/") : "static/og-image.png"}`
     yield write({
       ctx,
       content: `
         <!DOCTYPE html>
-        <html lang="en-us">
+        <html lang="zh-Hant">
         <head>
         <title>${ogSlug}</title>
         <link rel="canonical" href="${redirUrl}">
         <meta name="robots" content="noindex">
+        <meta name="description" content="${description}">
+        <meta property="og:image" content="${imageUrl}">
         <meta charset="utf-8">
         <meta http-equiv="refresh" content="0; url=${redirUrl}">
         </head>

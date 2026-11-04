@@ -7,6 +7,12 @@ export const EditorialLayers: QuartzTransformerPlugin = () => ({
   name: "EditorialLayers",
   htmlPlugins() {
     return [() => (tree: Root, file) => {
+      let section = ""
+      for (const node of tree.children) {
+        if (node.type !== "element") continue
+        if (node.tagName === "h2") section = toString(node)
+        if (section === "故事年表" && (node.tagName === "table" || node.tagName === "div" && node.properties.className?.toString().includes("table-container"))) node.properties.className = [...(Array.isArray(node.properties.className) ? node.properties.className : []), "chronology"]
+      }
       visit(tree, "element", (node: Element) => {
         if (/^h[2-4]$/.test(node.tagName)) {
           const title = toString(node)
@@ -24,10 +30,18 @@ export const EditorialLayers: QuartzTransformerPlugin = () => ({
             return index + 2
           })
         }
+        if (node.tagName === "a" && decodeURI(String(node.properties.href ?? "")).includes("待辦與規劃")) {
+          node.tagName = "span"
+          node.properties = { className: ["editorial-reference"], title: "編務文件，未公開" }
+        }
       })
       if (String(file.data.slug).startsWith("90-遊戲設定/")) tree.children.unshift({ type: "element", tagName: "div", properties: { className: ["layer-notice"] }, children: [
         { type: "element", tagName: "span", properties: { className: ["layer-badge", "layer-l3"] }, children: [{ type: "text", value: "L3 自創" }] },
         { type: "text", value: "本頁為遊戲設計與自創推演，請與原典記載分別閱讀。" },
+      ] })
+      if (/^(80-跨文本對應|85-他書人物|86-史書對應)\//.test(String(file.data.slug))) tree.children.unshift({ type: "element", tagName: "div", properties: { className: ["layer-notice"] }, children: [
+        { type: "element", tagName: "span", properties: { className: ["layer-badge", "layer-l2"] }, children: [{ type: "text", value: "L2 考據" }] },
+        { type: "text", value: "本頁為跨文本、史料或神譜對照；推論與原典記載分別閱讀。" },
       ] })
     }]
   },

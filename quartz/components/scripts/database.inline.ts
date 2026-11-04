@@ -1,4 +1,18 @@
 function setupDatabase() {
+  const entity = document.querySelector<HTMLSelectElement>("select[name='entity-type']")
+  if (entity) {
+    const filter = () => {
+      let count = 0
+      document.querySelectorAll<HTMLElement>(".entity-browser tbody tr").forEach(row => {
+        row.hidden = !!entity.value && row.dataset.type !== entity.value
+        if (!row.hidden) count++
+      })
+      document.querySelector(".entity-count")!.textContent = `顯示 ${count} 筆`
+    }
+    entity.addEventListener("change", filter)
+    window.addCleanup(() => entity.removeEventListener("change", filter))
+    filter()
+  }
   const browser = document.querySelector<HTMLElement>(".character-browser")
   if (browser) void setupCharacters(browser)
   const gallery = document.querySelector<HTMLSelectElement>("select[name='gallery-category']")
@@ -16,7 +30,7 @@ function setupDatabase() {
     filter()
   }
   document.querySelectorAll("article h2").forEach(heading => {
-    if (heading.textContent?.trim() !== "古籍圖像") return
+    if (!["古籍圖像", "圖像與來源", "核實圖像與使用場景"].includes(heading.textContent?.trim() ?? "")) return
     const grid = document.createElement("div")
     grid.className = "source-gallery"
     heading.after(grid)
@@ -51,11 +65,14 @@ function setupDatabase() {
     anchor.append(img)
   })
   const openImage = (event: Event) => {
+    if (event instanceof MouseEvent && (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)) return
     const target = (event.target as Element).closest<HTMLAnchorElement>("a.image-zoom")
     if (!target) return
     event.preventDefault()
+    event.stopPropagation()
     const dialog = document.createElement("dialog")
     dialog.className = "image-lightbox"
+    dialog.setAttribute("aria-label", target.querySelector("img")?.alt ?? "放大圖像")
     const close = document.createElement("button")
     close.textContent = "關閉圖片 ×"
     const img = document.createElement("img")
@@ -65,13 +82,20 @@ function setupDatabase() {
     document.body.append(dialog)
     close.onclick = () => dialog.close()
     dialog.onclick = e => { if (e.target === dialog) dialog.close() }
+    dialog.addEventListener("keydown", e => {
+      if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); dialog.close() }
+    })
     dialog.addEventListener("close", () => dialog.remove(), { once: true })
     dialog.showModal()
   }
-  document.addEventListener("click", openImage)
-  window.addCleanup(() => document.removeEventListener("click", openImage))
+  document.addEventListener("click", openImage, true)
+  window.addCleanup(() => {
+    document.removeEventListener("click", openImage, true)
+    document.querySelectorAll("dialog.image-lightbox").forEach(dialog => dialog.remove())
+  })
 }
 document.addEventListener("nav", setupDatabase)
+export {}
 
 type CharacterRow = { slug: string; name: string; aliases: string[]; camp: string[]; appearance: string; history: string; god: boolean; first: number | null; image: string | null }
 async function setupCharacters(root: HTMLElement) {

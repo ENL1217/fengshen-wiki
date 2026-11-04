@@ -19,15 +19,15 @@ const config: QuartzConfig = {
     },
     locale: "zh-TW",
     baseUrl: "ENL1217.github.io/fengshen-wiki",
-    ignorePatterns: ["private", "templates", ".obsidian"],
+    ignorePatterns: ["private", "templates", ".obsidian", "00-說明/scripts/**", "00-說明/法術清單_暫.txt", "00-說明/法寶清單_暫.txt", "00-說明/待建清單_Phase3.txt", "00-說明/連結清單_Phase1.txt", "00-說明/待辦與規劃.md"],
     defaultDateType: "modified",
     theme: {
       fontOrigin: "googleFonts",
       cdnCaching: true,
       typography: {
         header: { name: "Noto Serif TC", weights: [400, 700], includeItalic: false },
-        body: { name: "Noto Sans TC", weights: [400, 600], includeItalic: false },
-        code: "IBM Plex Mono",
+        body: { name: "Noto Sans TC", weights: [400], includeItalic: false },
+        code: { name: "IBM Plex Mono", weights: [400], includeItalic: false },
       },
       colors: {
         lightMode: {
@@ -74,7 +74,7 @@ const config: QuartzConfig = {
       Plugin.CrawlLinks({ markdownLinkResolution: "shortest" }),
       Plugin.Description(),
       Plugin.EditorialLayers(),
-      Plugin.Latex({ renderEngine: "katex" }),
+      Plugin.Latex({ renderEngine: "mathjax" }),
     ],
     filters: [Plugin.RemoveDrafts()],
     emitters: [

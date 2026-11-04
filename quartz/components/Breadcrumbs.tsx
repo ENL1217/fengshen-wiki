@@ -30,14 +30,14 @@ interface BreadcrumbOptions {
 
 const defaultOptions: BreadcrumbOptions = {
   spacerSymbol: "❯",
-  rootName: "Home",
+  rootName: "首頁",
   resolveFrontmatterTitle: true,
   showCurrentPage: true,
 }
 
 function formatCrumb(displayName: string, baseSlug: FullSlug, currentSlug: SimpleSlug): CrumbData {
   return {
-    displayName: displayName.replaceAll("-", " "),
+    displayName: displayName.replace(/^\d+-/, "").replaceAll("-", " "),
     path: resolveRelative(baseSlug, currentSlug),
   }
 }

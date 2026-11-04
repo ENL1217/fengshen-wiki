@@ -65,7 +65,7 @@ export default ((opts?: Partial<GraphOptions>) => {
     const localGraph = { ...defaultOptions.localGraph, ...opts?.localGraph }
     const globalGraph = { ...defaultOptions.globalGraph, ...opts?.globalGraph }
     return (
-      <div class={classNames(displayClass, "graph", fileData.slug === "關係圖譜" ? "full-graph" : undefined)}>
+      <div class={classNames(displayClass, "graph", fileData.slug === "關係圖譜" ? "full-graph" : "")}>
         <h3>{i18n(cfg.locale).components.graph.title}</h3>
         <div class="graph-outer">
           <div class="graph-container" data-cfg={JSON.stringify(fileData.slug === "關係圖譜" ? { ...globalGraph, showTags: false } : localGraph)}></div>

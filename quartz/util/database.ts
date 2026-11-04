@@ -19,7 +19,7 @@ export const isGod = (file: QuartzPluginData) => {
   const value = plain(file.frontmatter?.["封神"])
   return !!value && !/^(無|未|不|肉身成聖|成仙|待)/.test(value)
 }
-export interface SourceImage { title: string; kind: string; characters?: string[]; chapters?: number[]; description: string; source_page: string; license: string; local_path: string; thumbnail_path?: string; commons_metadata?: Record<string, { value: string }> }
+export interface SourceImage { title: string; kind: string; characters?: string[]; chapters?: number[]; description: string; source_page: string; license: string; license_url?: string; attribution?: string; transformation?: string; local_path: string; thumbnail_path?: string; commons_metadata?: Record<string, { value: string }> }
 export const images: SourceImage[] = JSON.parse(fs.readFileSync("content/95-圖像資料/來源紀錄.json", "utf8"))
 export const sourceFor = (path?: string) => images.find(image => image.local_path === path)
 const statsText = fs.readFileSync("content/90-遊戲設定/人物數值表.md", "utf8")
